@@ -23,6 +23,14 @@ public class CampoMinado {
         this.estado = new int[largura][altura];
     }
 
+    public int getLargura() {
+        return largura;
+    }
+
+    public int getAltura() {
+        return altura;
+    }
+
     public int getEstadoQuadricula(int x, int y) {
         return estado[x][y];
     }

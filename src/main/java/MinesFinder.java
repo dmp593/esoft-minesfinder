@@ -32,7 +32,7 @@ public class MinesFinder extends JFrame {
     }
 
     private void btnJogoFacilActionPerformed(ActionEvent e) {
-        new JanelaDeJogo();
+        new JanelaDeJogo(new CampoMinado(9, 9, 10));
     }
 
     private void btnJogoMedioActionPerformed(ActionEvent e) {

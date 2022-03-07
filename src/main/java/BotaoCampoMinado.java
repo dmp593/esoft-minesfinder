@@ -5,8 +5,8 @@ public class BotaoCampoMinado extends JButton {
 
     private int estado;
 
-    public BotaoCampoMinado(int estado) {
-        this.estado = estado;
+    public BotaoCampoMinado() {
+        this.estado = CampoMinado.TAPADO;
     }
 
     public void setEstado(int estado) {
