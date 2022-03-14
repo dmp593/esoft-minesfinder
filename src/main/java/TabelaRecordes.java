@@ -1,11 +1,13 @@
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-public class TabelaRecordes {
+public class TabelaRecordes implements Serializable {
     private String nomeJogador;
     private long duracaoEmSegundos;
 
-    private List<TabelaRecordesListener> listeners;
+    private transient List<TabelaRecordesListener> listeners;
 
     public TabelaRecordes() {
         this.nomeJogador = "Anónimo";
@@ -23,12 +25,17 @@ public class TabelaRecordes {
     }
 
     public void addTabelaRecordesListener(TabelaRecordesListener listener) {
+        if (listeners == null) {
+            listeners = new LinkedList<>();
+        }
+
         if (! listeners.contains(listener)) {
             this.listeners.add(listener);
         }
     }
 
     public void removeTabelaRecordesListener(TabelaRecordesListener listener) {
+        if (listeners == null) return;
         this.listeners.remove(listener);
     }
 
@@ -42,6 +49,8 @@ public class TabelaRecordes {
     }
 
     private void notifyRecordesAtualizados() {
+        if (listeners == null) return;
+
         for (TabelaRecordesListener listener : listeners) {
             listener.recordesAtualizados(this);
         }
