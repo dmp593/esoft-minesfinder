@@ -154,9 +154,9 @@ public class JanelaDeJogo extends JFrame {
     }
 
     private void actualizarEstadoBotoes() {
-        for (int x = 0; x < campoMinado.getAltura(); x++) {
-            for (int y = 0; y < campoMinado.getLargura(); y++) {
-                botoes[x][y].setEstado(campoMinado.getEstadoQuadricula(x, y));
+        for (int linha = 0; linha < campoMinado.getAltura(); linha++) {
+            for (int coluna = 0; coluna < campoMinado.getLargura(); coluna++) {
+                botoes[linha][coluna].setEstado(campoMinado.getEstadoQuadricula(linha, coluna));
             }
         }
     }
