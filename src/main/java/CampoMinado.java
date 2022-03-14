@@ -21,7 +21,7 @@ public class CampoMinado {
     private boolean jogoDerrotado;
 
     private long instanteInicioJogo;
-    private long duracaoJogo;
+    private long duracaoJogoEmMilisegundos;
 
     public CampoMinado(int largura, int altura, int nrMinas) {
         this.largura = largura;
@@ -66,8 +66,24 @@ public class CampoMinado {
         return jogoDerrotado;
     }
 
-    public long getDuracaoJogo() {
-        return jogoTerminado ? duracaoJogo : System.currentTimeMillis() - instanteInicioJogo;
+    public long getDuracaoJogoEmMilisegundos() {
+        return jogoTerminado ? duracaoJogoEmMilisegundos : System.currentTimeMillis() - instanteInicioJogo;
+    }
+
+    private void iniciarJogo(int x, int y) {
+        colocarMinas(x, y);
+        primeiraJogada = false;
+        instanteInicioJogo = System.currentTimeMillis();
+    }
+
+    private void pararJogo(boolean vitoria) {
+        jogoTerminado = true;
+        jogoDerrotado = !vitoria;
+        guardarDuracaoJogo();
+    }
+
+    private void guardarDuracaoJogo() {
+        duracaoJogoEmMilisegundos = System.currentTimeMillis() - instanteInicioJogo;
     }
 
     public void revelarQuadricula(int x, int y) {
@@ -76,18 +92,12 @@ public class CampoMinado {
         }
 
         if (primeiraJogada) {
-            colocarMinas(x, y);
-            primeiraJogada = false;
-
-            instanteInicioJogo = System.currentTimeMillis();
+            iniciarJogo(x, y);
         }
 
         if (hasMina(x, y)) {
             estado[x][y] = REBENTADO;
-            jogoTerminado = true;
-            jogoDerrotado = true;
-
-            duracaoJogo = System.currentTimeMillis() - instanteInicioJogo;
+            pararJogo(false);
             return;
         }
 
@@ -97,10 +107,7 @@ public class CampoMinado {
         }
 
         if (isVitoria()) {
-            jogoTerminado = true;
-            jogoDerrotado = false;
-
-            duracaoJogo = System.currentTimeMillis() - instanteInicioJogo;
+            pararJogo(true);
         }
     }
 

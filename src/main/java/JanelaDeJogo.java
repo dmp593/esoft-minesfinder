@@ -4,12 +4,14 @@ import java.awt.event.*;
 
 public class JanelaDeJogo extends JFrame {
     private CampoMinado campoMinado;
-    private BotaoCampoMinado[][] botoes;
+    private TabelaRecordes recordes;
 
     private JPanel painelJogo;
+    private BotaoCampoMinado[][] botoes;
 
-    public JanelaDeJogo(CampoMinado campoMinado) {
+    public JanelaDeJogo(CampoMinado campoMinado, TabelaRecordes recordes) {
         this.campoMinado = campoMinado;
+        this.recordes = recordes;
 
         var altura = campoMinado.getAltura();
         var largura = campoMinado.getLargura();
@@ -129,7 +131,7 @@ public class JanelaDeJogo extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE
             );
         } else {
-            var duracaoJogoEmSegs = campoMinado.getDuracaoJogo() / 1000;
+            var duracaoJogoEmSegs = campoMinado.getDuracaoJogoEmMilisegundos() / 1000;
 
             JOptionPane.showMessageDialog(
                     null,
@@ -137,6 +139,11 @@ public class JanelaDeJogo extends JFrame {
                     "Vitória",
                     JOptionPane.INFORMATION_MESSAGE
             );
+
+            if (duracaoJogoEmSegs < recordes.getDuracaoEmSegundos()) {
+                String nome=JOptionPane.showInputDialog("Introduza o seu nome");
+                recordes.setRecorde(nome, duracaoJogoEmSegs);
+            }
         }
 
         setVisible(false);
