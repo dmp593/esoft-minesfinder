@@ -119,7 +119,7 @@ public class JanelaDeJogo extends JFrame {
             );
 
             if (duracaoJogoEmSegs < recorde.getDuracaoEmSegundos()) {
-                String nome=JOptionPane.showInputDialog("Introduza o seu nome");
+                String nome = JOptionPane.showInputDialog("Introduza o seu nome");
                 recorde.setRecorde(nome, duracaoJogoEmSegs);
             }
         }
