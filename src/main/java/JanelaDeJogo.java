@@ -91,8 +91,6 @@ public class JanelaDeJogo extends JFrame {
         for (var linha = 0; linha < altura; ++linha) {
             for (var coluna = 0; coluna < largura; ++coluna) {
                 botoes[linha][coluna] = new BotaoCampoMinado(linha, coluna);
-                botoes[linha][coluna].setFont(new Font("Serif", Font.PLAIN, 16));
-
                 botoes[linha][coluna].addMouseListener(mouseListener);
                 botoes[linha][coluna].addKeyListener(keyListener);
                 botoes[linha][coluna].addActionListener(this::btnCampoMinadoActionPerformed);

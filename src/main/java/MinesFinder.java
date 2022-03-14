@@ -29,6 +29,10 @@ public class MinesFinder extends JFrame {
         recordesMedio = new TabelaRecordes();
         recordesDificil = new TabelaRecordes();
 
+        recordesFacil.addTabelaRecordesListener(this::recordesFacilAtualizados);
+        recordesMedio.addTabelaRecordesListener(this::recordesMedioAtualizados);
+        recordesDificil.addTabelaRecordesListener(this::recordesDificilAtualizados);
+
         btnJogoFacil.addActionListener(this::btnJogoFacilActionPerformed);
         btnJogoMedio.addActionListener(this::btnJogoMedioActionPerformed);
         btnJogoDificil.addActionListener(this::btnJogoDificilActionPerformed);
@@ -39,7 +43,7 @@ public class MinesFinder extends JFrame {
     }
 
     private void btnJogoFacilActionPerformed(ActionEvent e) {
-        new JanelaDeJogo(new CampoMinado(9, 9, 0), recordesFacil);
+        new JanelaDeJogo(new CampoMinado(9, 9, 3), recordesFacil);
     }
 
     private void btnJogoMedioActionPerformed(ActionEvent e) {
@@ -52,6 +56,21 @@ public class MinesFinder extends JFrame {
 
     private void btnSairActionPerformed(ActionEvent e) {
         System.exit(0);
+    }
+
+    private void recordesFacilAtualizados(TabelaRecordes recorde) {
+        this.lblJogadorFacil.setText(recorde.getNomeJogador());
+        this.lblPontuacaoFacil.setText(String.valueOf(recorde.getDuracaoEmSegundos()));
+    }
+
+    private void recordesMedioAtualizados(TabelaRecordes recorde) {
+        this.lblJogadorMedio.setText(recorde.getNomeJogador());
+        this.lblPontuacaoMedio.setText(String.valueOf(recorde.getDuracaoEmSegundos()));
+    }
+
+    private void recordesDificilAtualizados(TabelaRecordes recorde) {
+        this.lblJogadorDificil.setText(recorde.getNomeJogador());
+        this.lblPontuacaoDificil.setText(String.valueOf(recorde.getDuracaoEmSegundos()));
     }
 
     public static void main(String[] args) {
