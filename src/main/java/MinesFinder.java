@@ -6,15 +6,21 @@ import java.util.logging.Logger;
 
 public class MinesFinder extends JFrame {
 
+    private static final String NOME_FICHEIRO_RECORDES = "minesfinder.records";
+
     private JPanel painelPrincipal;
-    private JButton btnJogoMedio;
-    private JButton btnSair;
+
     private JButton btnJogoFacil;
+    private JButton btnJogoMedio;
     private JButton btnJogoDificil;
+    private JButton btnSair;
+
     private JLabel lblJogadorFacil;
     private JLabel lblPontuacaoFacil;
+
     private JLabel lblJogadorMedio;
     private JLabel lblPontuacaoMedio;
+
     private JLabel lblJogadorDificil;
     private JLabel lblPontuacaoDificil;
 
@@ -103,10 +109,13 @@ public class MinesFinder extends JFrame {
         guardarRecordes();
     }
 
+    private File getFicheiroRecordes() {
+        return new File(System.getProperty("user.home") + File.separator + NOME_FICHEIRO_RECORDES);
+    }
+
     private void guardarRecordes() {
         try {
-            var f = new File(System.getProperty("user.home") + File.separator + "minesfinder.recordes");
-            var oos = new ObjectOutputStream(new FileOutputStream(f));
+            var oos = new ObjectOutputStream(new FileOutputStream(getFicheiroRecordes()));
 
             oos.writeObject(recordeFacil);
             oos.writeObject(recordeMedio);
@@ -119,7 +128,7 @@ public class MinesFinder extends JFrame {
     }
 
     private boolean lerRecordes() {
-        var f = new File(System.getProperty("user.home") + File.separator + "minesfinder.recordes");
+        var f = getFicheiroRecordes();
         if (!f.canRead()) return false;
 
         try {
