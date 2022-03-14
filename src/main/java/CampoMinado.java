@@ -28,15 +28,15 @@ public class CampoMinado {
         this.altura = altura;
         this.nrMinas = nrMinas;
 
-        this.minas = new boolean[largura][altura];
-        this.estado = new int[largura][altura];
+        this.minas = new boolean[altura][largura];
+        this.estado = new int[altura][largura];
 
         this.primeiraJogada = true;
         this.jogoTerminado = false;
         this.jogoDerrotado = false;
 
-        for (var x = 0; x < largura; ++x) {
-            for (var y = 0; y < altura; ++y) {
+        for (var x = 0; x < altura; ++x) {
+            for (var y = 0; y < largura; ++y) {
                 estado[x][y] = TAPADO;
             }
         }
@@ -71,7 +71,7 @@ public class CampoMinado {
     }
 
     public void revelarQuadricula(int x, int y) {
-        if (estado[x][y] < TAPADO) {
+        if (jogoTerminado || estado[x][y] < TAPADO) {
             return;
         }
 
@@ -111,8 +111,8 @@ public class CampoMinado {
 
         for (var i = 0; i < nrMinas; ++i) {
             do {
-                x = aleatorio.nextInt(largura);
-                y = aleatorio.nextInt(altura);
+                x = aleatorio.nextInt(altura);
+                y = aleatorio.nextInt(largura);
             } while (minas[x][y] || (x == exceptoX && y == exceptoY));
             minas[x][y] = true;
         }
@@ -121,9 +121,9 @@ public class CampoMinado {
     private int contarMinasVizinhas(int x, int y) {
         var nrMinasVizinhas = 0;
 
-        for (var i = Math.max(0, x - 1); i < Math.min(largura, x + 2); ++i) {
-            for (var j = Math.max(0, y - 1); j < Math.min(altura, y + 2); ++j) {
-                if (hasMina(x, y)) {
+        for (var i = Math.max(0, x - 1); i < Math.min(altura, x + 2); ++i) {
+            for (var j = Math.max(0, y - 1); j < Math.min(largura, y + 2); ++j) {
+                if (hasMina(i, j)) {
                     ++nrMinasVizinhas;
                 }
             }
@@ -133,9 +133,9 @@ public class CampoMinado {
     }
 
     private void revelarQuadriculasVizinhas(int x, int y) {
-        for (var i = Math.max(0, x - 1); i < Math.min(largura, x + 2); ++i) {
-            for (var j = Math.max(0, y - 1); j < Math.min(altura, y + 2); ++j) {
-                if (! hasMina(x, y)) {
+        for (var i = Math.max(0, x - 1); i < Math.min(altura, x + 2); ++i) {
+            for (var j = Math.max(0, y - 1); j < Math.min(largura, y + 2); ++j) {
+                if (! hasMina(i, j)) {
                     revelarQuadricula(i, j);
                 }
             }
@@ -143,8 +143,8 @@ public class CampoMinado {
     }
 
     private boolean isVitoria() {
-        for (int i = 0; i < largura; ++i) {
-            for (var j = 0 ; j < altura; ++j) {
+        for (int i = 0; i < altura; ++i) {
+            for (var j = 0 ; j < largura; ++j) {
                 if (!minas[i][j] && estado[i][j] >= TAPADO) {
                     return false;
                 }

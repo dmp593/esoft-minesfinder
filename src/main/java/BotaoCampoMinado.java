@@ -3,15 +3,24 @@ import java.awt.*;
 
 public class BotaoCampoMinado extends JButton {
 
-    private int estado;
+    private int linha;
+    private int coluna;
 
-    public BotaoCampoMinado() {
-        this.estado = CampoMinado.TAPADO;
+    public BotaoCampoMinado(int linha, int coluna) {
+        this.linha = linha;
+        this.coluna = coluna;
+        setOpaque(true); // macOS
+    }
+
+    public int getLinha() {
+        return linha;
+    }
+
+    public int getColuna() {
+        return coluna;
     }
 
     public void setEstado(int estado) {
-        this.estado = estado;
-
         switch (estado) {
             case CampoMinado.VAZIO:
                 setText("");
