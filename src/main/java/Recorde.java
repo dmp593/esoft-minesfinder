@@ -11,7 +11,7 @@ public class Recorde implements Serializable {
 
     public Recorde() {
         this.nomeJogador = "Anónimo";
-        this.duracaoEmSegundos = Long.MAX_VALUE;
+        this.duracaoEmSegundos = 9999999;
 
         this.listeners = new ArrayList<>();
     }
