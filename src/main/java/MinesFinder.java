@@ -140,9 +140,7 @@ public class MinesFinder extends JFrame {
 
             ois.close();
             return true;
-        } catch (IOException ex) {
-            Logger.getLogger(MinesFinder.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(MinesFinder.class.getName()).log(Level.SEVERE, null, ex);
         }
 
