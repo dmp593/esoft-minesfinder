@@ -124,7 +124,7 @@ public class JanelaDeJogo extends JFrame {
         if (campoMinado.isJogoDerrotado()) {
             JOptionPane.showMessageDialog(
                     null,
-                    "Oh, rebentou uma mina :(",
+                    "Oh :( rebentou uma mina",
                     "Perdeu...",
                     JOptionPane.INFORMATION_MESSAGE
             );
