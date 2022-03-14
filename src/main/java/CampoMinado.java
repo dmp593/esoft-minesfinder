@@ -23,9 +23,9 @@ public class CampoMinado {
     private long instanteInicioJogo;
     private long duracaoJogoEmMilisegundos;
 
-    public CampoMinado(int largura, int altura, int nrMinas) {
-        this.largura = largura;
+    public CampoMinado(int altura, int largura, int nrMinas) {
         this.altura = altura;
+        this.largura = largura;
         this.nrMinas = nrMinas;
 
         this.minas = new boolean[altura][largura];
@@ -35,9 +35,9 @@ public class CampoMinado {
         this.jogoTerminado = false;
         this.jogoDerrotado = false;
 
-        for (var x = 0; x < altura; ++x) {
-            for (var y = 0; y < largura; ++y) {
-                estado[x][y] = TAPADO;
+        for (var linha = 0; linha < altura; ++linha) {
+            for (var coluna = 0; coluna < largura; ++coluna) {
+                estado[linha][coluna] = TAPADO;
             }
         }
     }
@@ -50,12 +50,12 @@ public class CampoMinado {
         return altura;
     }
 
-    public int getEstadoQuadricula(int x, int y) {
-        return estado[x][y];
+    public int getEstadoQuadricula(int linha, int coluna) {
+        return estado[linha][coluna];
     }
 
-    public boolean hasMina(int x, int y) {
-        return minas[x][y];
+    public boolean hasMina(int linha, int coluna) {
+        return minas[linha][coluna];
     }
 
     public boolean isJogoTerminado() {
@@ -70,8 +70,8 @@ public class CampoMinado {
         return jogoTerminado ? duracaoJogoEmMilisegundos : System.currentTimeMillis() - instanteInicioJogo;
     }
 
-    private void iniciarJogo(int x, int y) {
-        colocarMinas(x, y);
+    private void iniciarJogo(int linha, int coluna) {
+        colocarMinas(linha, coluna);
         primeiraJogada = false;
         instanteInicioJogo = System.currentTimeMillis();
     }
@@ -86,24 +86,24 @@ public class CampoMinado {
         duracaoJogoEmMilisegundos = System.currentTimeMillis() - instanteInicioJogo;
     }
 
-    public void revelarQuadricula(int x, int y) {
-        if (jogoTerminado || estado[x][y] < TAPADO) {
+    public void revelarQuadricula(int linha, int coluna) {
+        if (jogoTerminado || estado[linha][coluna] < TAPADO) {
             return;
         }
 
         if (primeiraJogada) {
-            iniciarJogo(x, y);
+            iniciarJogo(linha, coluna);
         }
 
-        if (hasMina(x, y)) {
-            estado[x][y] = REBENTADO;
+        if (hasMina(linha, coluna)) {
+            estado[linha][coluna] = REBENTADO;
             pararJogo(false);
             return;
         }
 
-        estado[x][y] = contarMinasVizinhas(x, y);
-        if (estado[x][y] == VAZIO) {
-            revelarQuadriculasVizinhas(x, y);
+        estado[linha][coluna] = contarMinasVizinhas(linha, coluna);
+        if (estado[linha][coluna] == VAZIO) {
+            revelarQuadriculasVizinhas(linha, coluna);
         }
 
         if (isVitoria()) {
@@ -111,26 +111,27 @@ public class CampoMinado {
         }
     }
 
-    private void colocarMinas(int exceptoX, int exceptoY) {
+    private void colocarMinas(int exceptoLinha, int exceptoColuna) {
         var aleatorio = new Random();
-        var x = 0;
-        var y = 0;
+
+        var linha = -1;
+        var coluna = -1;
 
         for (var i = 0; i < nrMinas; ++i) {
             do {
-                x = aleatorio.nextInt(altura);
-                y = aleatorio.nextInt(largura);
-            } while (minas[x][y] || (x == exceptoX && y == exceptoY));
-            minas[x][y] = true;
+                linha = aleatorio.nextInt(altura);
+                coluna = aleatorio.nextInt(largura);
+            } while (minas[linha][coluna] || (linha == exceptoLinha && coluna == exceptoColuna));
+            minas[linha][coluna] = true;
         }
     }
 
-    private int contarMinasVizinhas(int x, int y) {
+    private int contarMinasVizinhas(int linha, int coluna) {
         var nrMinasVizinhas = 0;
 
-        for (var i = Math.max(0, x - 1); i < Math.min(altura, x + 2); ++i) {
-            for (var j = Math.max(0, y - 1); j < Math.min(largura, y + 2); ++j) {
-                if (hasMina(i, j)) {
+        for (var linha0 = Math.max(0, linha - 1); linha0 < Math.min(altura, linha + 2); ++linha0) {
+            for (var coluna0 = Math.max(0, coluna - 1); coluna0 < Math.min(largura, coluna + 2); ++coluna0) {
+                if (hasMina(linha0, coluna0)) {
                     ++nrMinasVizinhas;
                 }
             }
@@ -139,20 +140,20 @@ public class CampoMinado {
         return nrMinasVizinhas;
     }
 
-    private void revelarQuadriculasVizinhas(int x, int y) {
-        for (var i = Math.max(0, x - 1); i < Math.min(altura, x + 2); ++i) {
-            for (var j = Math.max(0, y - 1); j < Math.min(largura, y + 2); ++j) {
-                if (! hasMina(i, j)) {
-                    revelarQuadricula(i, j);
+    private void revelarQuadriculasVizinhas(int linha, int coluna) {
+        for (var linha0 = Math.max(0, linha - 1); linha0 < Math.min(altura, linha + 2); ++linha0) {
+            for (var coluna0 = Math.max(0, coluna - 1); coluna0 < Math.min(largura, coluna + 2); ++coluna0) {
+                if (! hasMina(linha0, coluna0)) {
+                    revelarQuadricula(linha0, coluna0);
                 }
             }
         }
     }
 
     private boolean isVitoria() {
-        for (int i = 0; i < altura; ++i) {
-            for (var j = 0 ; j < largura; ++j) {
-                if (!minas[i][j] && estado[i][j] >= TAPADO) {
+        for (int linha = 0; linha < altura; ++linha) {
+            for (var coluna = 0 ; coluna < largura; ++coluna) {
+                if (!minas[linha][coluna] && estado[linha][coluna] >= TAPADO) {
                     return false;
                 }
             }
@@ -160,21 +161,21 @@ public class CampoMinado {
         return true;
     }
 
-    public void marcarComoTendoMina(int x, int y) {
-        if (this.estado[x][y] == TAPADO || this.estado[x][y] == DUVIDA) {
-            this.estado[x][y] = MARCADO;
+    public void marcarComoTendoMina(int linha, int coluna) {
+        if (this.estado[linha][coluna] == TAPADO || this.estado[linha][coluna] == DUVIDA) {
+            this.estado[linha][coluna] = MARCADO;
         }
     }
 
-    public void marcarComoSuspeita(int x, int y) {
-        if (this.estado[x][y] == TAPADO || this.estado[x][y] == MARCADO) {
-            this.estado[x][y] = DUVIDA;
+    public void marcarComoSuspeita(int linha, int coluna) {
+        if (this.estado[linha][coluna] == TAPADO || this.estado[linha][coluna] == MARCADO) {
+            this.estado[linha][coluna] = DUVIDA;
         }
     }
 
-    public void desmarcarQuadricula(int x, int y) {
-        if (this.estado[x][y] == DUVIDA || this.estado[x][y] == MARCADO) {
-            this.estado[x][y] = TAPADO;
+    public void desmarcarQuadricula(int linha, int coluna) {
+        if (this.estado[linha][coluna] == DUVIDA || this.estado[linha][coluna] == MARCADO) {
+            this.estado[linha][coluna] = TAPADO;
         }
     }
 }
