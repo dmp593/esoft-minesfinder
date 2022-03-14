@@ -1,3 +1,3 @@
 public interface RecordeListener {
-    void recordesAtualizados(Recorde recorde);
+    void novoRecorde(Recorde recorde);
 }

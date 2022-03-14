@@ -44,15 +44,12 @@ public class Recorde implements Serializable {
             this.nomeJogador = nomeJogador;
             this.duracaoEmSegundos = duracaoEmSegundos;
 
-            notifyRecordesAtualizados();
+            notificarNovoRecorde();
         }
     }
 
-    private void notifyRecordesAtualizados() {
+    private void notificarNovoRecorde() {
         if (listeners == null) return;
-
-        for (RecordeListener listener : listeners) {
-            listener.recordesAtualizados(this);
-        }
+        listeners.forEach(l -> l.novoRecorde(this));
     }
 }
