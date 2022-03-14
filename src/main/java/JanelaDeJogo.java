@@ -25,25 +25,13 @@ public class JanelaDeJogo extends JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() != MouseEvent.BUTTON3) {
-                    return;
-                }
+                if (e.getButton() != MouseEvent.BUTTON3) return;
                 var botao = (BotaoCampoMinado) e.getSource();
 
                 var linha = botao.getLinha();
                 var coluna = botao.getColuna();
 
-                var estadoQuadricula = campoMinado.getEstadoQuadricula(linha, coluna);
-
-                if (estadoQuadricula == CampoMinado.TAPADO) {
-                    campoMinado.marcarComoTendoMina(linha, coluna);
-                } else if (estadoQuadricula == CampoMinado.MARCADO) {
-                    campoMinado.marcarComoSuspeita(linha, coluna);
-                } else if (estadoQuadricula == CampoMinado.DUVIDA) {
-                    campoMinado.desmarcarQuadricula(linha, coluna);
-                }
-
-                actualizarEstadoBotoes();
+                alterarEstadoQuadricula(linha, coluna);
             }
 
             @Override
@@ -68,19 +56,11 @@ public class JanelaDeJogo extends JFrame {
                 var coluna = botao.getColuna();
 
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_UP -> botoes[--linha < 0 ? altura - 1 : linha][coluna].requestFocus();
-                    case KeyEvent.VK_DOWN -> botoes[(linha + 1) % altura][coluna].requestFocus();
-                    case KeyEvent.VK_LEFT -> botoes[linha][--coluna < 0 ? largura - 1 : coluna].requestFocus();
-                    case KeyEvent.VK_RIGHT -> botoes[linha][(coluna + 1) % largura].requestFocus();
-                    case KeyEvent.VK_M -> {
-                        switch (campoMinado.getEstadoQuadricula(linha, coluna)) {
-                            case CampoMinado.TAPADO -> campoMinado.marcarComoTendoMina(linha, coluna);
-                            case CampoMinado.MARCADO -> campoMinado.marcarComoSuspeita(linha, coluna);
-                            case CampoMinado.DUVIDA -> campoMinado.desmarcarQuadricula(linha, coluna);
-                        }
-
-                        actualizarEstadoBotoes();
-                    }
+                    case KeyEvent.VK_UP -> getBotaoCima(linha, coluna).requestFocus();
+                    case KeyEvent.VK_DOWN -> getBotaoBaixo(linha, coluna).requestFocus();
+                    case KeyEvent.VK_LEFT -> getBotaoEsquerda(linha, coluna).requestFocus();
+                    case KeyEvent.VK_RIGHT -> getBotaoDireita(linha, coluna).requestFocus();
+                    case KeyEvent.VK_M -> alterarEstadoQuadricula(linha, coluna);
                 }
             }
 
@@ -145,6 +125,32 @@ public class JanelaDeJogo extends JFrame {
         }
 
         setVisible(false);
+    }
+
+    private BotaoCampoMinado getBotaoCima(int linha, int coluna) {
+        return botoes[--linha < 0 ? campoMinado.getAltura() - 1 : linha][coluna];
+    }
+
+    private BotaoCampoMinado getBotaoBaixo(int linha, int coluna) {
+        return botoes[(linha + 1) % campoMinado.getAltura()][coluna];
+    }
+
+    private BotaoCampoMinado getBotaoEsquerda(int linha, int coluna) {
+        return botoes[linha][--coluna < 0 ? campoMinado.getLargura() - 1 : coluna];
+    }
+
+    private BotaoCampoMinado getBotaoDireita(int linha, int coluna) {
+        return botoes[linha][(coluna + 1) % campoMinado.getLargura()];
+    }
+
+    private void alterarEstadoQuadricula(int linha, int coluna) {
+        switch (campoMinado.getEstadoQuadricula(linha, coluna)) {
+            case CampoMinado.TAPADO -> campoMinado.marcarComoTendoMina(linha, coluna);
+            case CampoMinado.MARCADO -> campoMinado.marcarComoSuspeita(linha, coluna);
+            case CampoMinado.DUVIDA -> campoMinado.desmarcarQuadricula(linha, coluna);
+        }
+
+        actualizarEstadoBotoes();
     }
 
     private void actualizarEstadoBotoes() {
