@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class JanelaDeJogo extends JFrame {
     private CampoMinado campoMinado;
@@ -17,10 +19,49 @@ public class JanelaDeJogo extends JFrame {
         botoes = new BotaoCampoMinado[altura][largura];
         painelJogo.setLayout(new GridLayout(altura, largura));
 
+        var mouseListener = new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.getButton() != MouseEvent.BUTTON3) {
+                    return;
+                }
+                var botao = (BotaoCampoMinado) e.getSource();
+
+                var linha = botao.getLinha();
+                var coluna = botao.getColuna();
+
+                var estadoQuadricula = campoMinado.getEstadoQuadricula(linha, coluna);
+
+                if (estadoQuadricula == CampoMinado.TAPADO) {
+                    campoMinado.marcarComoTendoMina(linha, coluna);
+                } else if (estadoQuadricula == CampoMinado.MARCADO) {
+                    campoMinado.marcarComoSuspeita(linha, coluna);
+                } else if (estadoQuadricula == CampoMinado.DUVIDA) {
+                    campoMinado.desmarcarQuadricula(linha, coluna);
+                }
+
+                actualizarEstadoBotoes();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        };
+
         for (var linha = 0; linha < altura; ++linha) {
             for (var coluna = 0; coluna < largura; ++coluna) {
                 botoes[linha][coluna] = new BotaoCampoMinado(linha, coluna);
                 botoes[linha][coluna].setFont(new Font("Serif", Font.PLAIN, 16));
+
+                botoes[linha][coluna].addMouseListener(mouseListener);
                 botoes[linha][coluna].addActionListener(this::btnCampoMinadoActionPerformed);
 
                 painelJogo.add(botoes[linha][coluna]);
