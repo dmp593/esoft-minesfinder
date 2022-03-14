@@ -10,8 +10,8 @@ public class Recorde implements Serializable {
     private transient List<RecordeListener> listeners;
 
     public Recorde() {
-        this.nomeJogador = "Anónimo";
-        this.duracaoEmSegundos = 9999999;
+        this.nomeJogador = "<jogador>";
+        this.duracaoEmSegundos = Long.MAX_VALUE;
 
         this.listeners = new ArrayList<>();
     }

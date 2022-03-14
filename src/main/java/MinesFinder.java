@@ -69,17 +69,23 @@ public class MinesFinder extends JFrame {
 
     private void atualizarRecordeFacil(Recorde recorde) {
         this.lblJogadorFacil.setText(recorde.getNomeJogador());
-        this.lblPontuacaoFacil.setText(String.valueOf(recorde.getDuracaoEmSegundos()));
+
+        var duracaoJogo = recorde.getDuracaoEmSegundos();
+        this.lblPontuacaoFacil.setText(duracaoJogo == Long.MAX_VALUE ? "<999>" : String.valueOf(duracaoJogo));
     }
 
     private void atualizarRecordeMedio(Recorde recorde) {
         this.lblJogadorMedio.setText(recorde.getNomeJogador());
-        this.lblPontuacaoMedio.setText(String.valueOf(recorde.getDuracaoEmSegundos()));
+
+        var duracaoJogo = recorde.getDuracaoEmSegundos();
+        this.lblPontuacaoMedio.setText(duracaoJogo == Long.MAX_VALUE ? "<999>" : String.valueOf(duracaoJogo));
     }
 
     private void atualizarRecordeDificil(Recorde recorde) {
         this.lblJogadorDificil.setText(recorde.getNomeJogador());
-        this.lblPontuacaoDificil.setText(String.valueOf(recorde.getDuracaoEmSegundos()));
+
+        var duracaoJogo = recorde.getDuracaoEmSegundos();
+        this.lblPontuacaoDificil.setText(duracaoJogo == Long.MAX_VALUE ? "<999>" : String.valueOf(duracaoJogo));
     }
 
     private void recordeFacilAtualizado(Recorde recorde) {
