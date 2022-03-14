@@ -20,6 +20,9 @@ public class CampoMinado {
     private boolean jogoTerminado;
     private boolean jogoDerrotado;
 
+    private long instanteInicioJogo;
+    private long duracaoJogo;
+
     public CampoMinado(int largura, int altura, int nrMinas) {
         this.largura = largura;
         this.altura = altura;
@@ -63,6 +66,10 @@ public class CampoMinado {
         return jogoDerrotado;
     }
 
+    public long getDuracaoJogo() {
+        return jogoTerminado ? duracaoJogo : System.currentTimeMillis() - instanteInicioJogo;
+    }
+
     public void revelarQuadricula(int x, int y) {
         if (estado[x][y] < TAPADO) {
             return;
@@ -71,12 +78,16 @@ public class CampoMinado {
         if (primeiraJogada) {
             colocarMinas(x, y);
             primeiraJogada = false;
+
+            instanteInicioJogo = System.currentTimeMillis();
         }
 
         if (hasMina(x, y)) {
             estado[x][y] = REBENTADO;
             jogoTerminado = true;
             jogoDerrotado = true;
+
+            duracaoJogo = System.currentTimeMillis() - instanteInicioJogo;
             return;
         }
 
@@ -88,6 +99,8 @@ public class CampoMinado {
         if (isVitoria()) {
             jogoTerminado = true;
             jogoDerrotado = false;
+
+            duracaoJogo = System.currentTimeMillis() - instanteInicioJogo;
         }
     }
 
@@ -138,5 +151,23 @@ public class CampoMinado {
             }
         }
         return true;
+    }
+
+    public void marcarComoTendoMina(int x, int y) {
+        if (this.estado[x][y] == TAPADO || this.estado[x][y] == DUVIDA) {
+            this.estado[x][y] = MARCADO;
+        }
+    }
+
+    public void marcarComoSuspeita(int x, int y) {
+        if (this.estado[x][y] == TAPADO || this.estado[x][y] == MARCADO) {
+            this.estado[x][y] = DUVIDA;
+        }
+    }
+
+    public void desmarcarQuadricula(int x, int y) {
+        if (this.estado[x][y] == DUVIDA || this.estado[x][y] == MARCADO) {
+            this.estado[x][y] = TAPADO;
+        }
     }
 }
