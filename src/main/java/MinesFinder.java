@@ -18,9 +18,9 @@ public class MinesFinder extends JFrame {
     private JLabel lblJogadorDificil;
     private JLabel lblPontuacaoDificil;
 
-    private TabelaRecordes recordesFacil;
-    private TabelaRecordes recordesMedio;
-    private TabelaRecordes recordesDificil;
+    private Recorde recordeFacil;
+    private Recorde recordeMedio;
+    private Recorde recordeDificil;
 
     public MinesFinder(String title) {
         super(title);
@@ -28,19 +28,19 @@ public class MinesFinder extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setContentPane(painelPrincipal);
 
-        recordesFacil = new TabelaRecordes();
-        recordesMedio = new TabelaRecordes();
-        recordesDificil = new TabelaRecordes();
+        recordeFacil = new Recorde();
+        recordeMedio = new Recorde();
+        recordeDificil = new Recorde();
 
         if (lerRecordes()) {
-            atualizarRecordeFacil(recordesFacil);
-            atualizarRecordeMedio(recordesMedio);
-            atualizarRecordeDificil(recordesDificil);
+            atualizarRecordeFacil(recordeFacil);
+            atualizarRecordeMedio(recordeMedio);
+            atualizarRecordeDificil(recordeDificil);
         }
 
-        recordesFacil.addTabelaRecordesListener(this::recordeFacilAtualizado);
-        recordesMedio.addTabelaRecordesListener(this::recordeMedioAtualizado);
-        recordesDificil.addTabelaRecordesListener(this::recordeDificilAtualizado);
+        recordeFacil.adicionarRecordeListener(this::recordeFacilAtualizado);
+        recordeMedio.adicionarRecordeListener(this::recordeMedioAtualizado);
+        recordeDificil.adicionarRecordeListener(this::recordeDificilAtualizado);
 
         btnJogoFacil.addActionListener(this::btnJogoFacilActionPerformed);
         btnJogoMedio.addActionListener(this::btnJogoMedioActionPerformed);
@@ -52,47 +52,47 @@ public class MinesFinder extends JFrame {
     }
 
     private void btnJogoFacilActionPerformed(ActionEvent e) {
-        new JanelaDeJogo(new CampoMinado(9, 9, 3), recordesFacil);
+        new JanelaDeJogo(new CampoMinado(9, 9, 3), recordeFacil);
     }
 
     private void btnJogoMedioActionPerformed(ActionEvent e) {
-        new JanelaDeJogo(new CampoMinado(16, 16, 40), recordesMedio);
+        new JanelaDeJogo(new CampoMinado(16, 16, 40), recordeMedio);
     }
 
     private void btnJogoDificilActionPerformed(ActionEvent e) {
-        new JanelaDeJogo(new CampoMinado(16, 30, 90), recordesDificil);
+        new JanelaDeJogo(new CampoMinado(16, 30, 90), recordeDificil);
     }
 
     private void btnSairActionPerformed(ActionEvent e) {
         System.exit(0);
     }
 
-    private void atualizarRecordeFacil(TabelaRecordes recorde) {
+    private void atualizarRecordeFacil(Recorde recorde) {
         this.lblJogadorFacil.setText(recorde.getNomeJogador());
         this.lblPontuacaoFacil.setText(String.valueOf(recorde.getDuracaoEmSegundos()));
     }
 
-    private void atualizarRecordeMedio(TabelaRecordes recorde) {
+    private void atualizarRecordeMedio(Recorde recorde) {
         this.lblJogadorMedio.setText(recorde.getNomeJogador());
         this.lblPontuacaoMedio.setText(String.valueOf(recorde.getDuracaoEmSegundos()));
     }
 
-    private void atualizarRecordeDificil(TabelaRecordes recorde) {
+    private void atualizarRecordeDificil(Recorde recorde) {
         this.lblJogadorDificil.setText(recorde.getNomeJogador());
         this.lblPontuacaoDificil.setText(String.valueOf(recorde.getDuracaoEmSegundos()));
     }
 
-    private void recordeFacilAtualizado(TabelaRecordes recorde) {
+    private void recordeFacilAtualizado(Recorde recorde) {
         atualizarRecordeFacil(recorde);
         guardarRecordes();
     }
 
-    private void recordeMedioAtualizado(TabelaRecordes recorde) {
+    private void recordeMedioAtualizado(Recorde recorde) {
         atualizarRecordeMedio(recorde);
         guardarRecordes();
     }
 
-    private void recordeDificilAtualizado(TabelaRecordes recorde) {
+    private void recordeDificilAtualizado(Recorde recorde) {
         atualizarRecordeDificil(recorde);
         guardarRecordes();
     }
@@ -102,9 +102,9 @@ public class MinesFinder extends JFrame {
             var f = new File(System.getProperty("user.home") + File.separator + "minesfinder.recordes");
             var oos = new ObjectOutputStream(new FileOutputStream(f));
 
-            oos.writeObject(recordesFacil);
-            oos.writeObject(recordesMedio);
-            oos.writeObject(recordesDificil);
+            oos.writeObject(recordeFacil);
+            oos.writeObject(recordeMedio);
+            oos.writeObject(recordeDificil);
 
             oos.close();
         } catch (IOException ex) {
@@ -119,9 +119,9 @@ public class MinesFinder extends JFrame {
         try {
             var ois = new ObjectInputStream(new FileInputStream(f));
 
-            recordesFacil = (TabelaRecordes) ois.readObject();
-            recordesMedio = (TabelaRecordes) ois.readObject();
-            recordesDificil = (TabelaRecordes) ois.readObject();
+            recordeFacil = (Recorde) ois.readObject();
+            recordeMedio = (Recorde) ois.readObject();
+            recordeDificil = (Recorde) ois.readObject();
 
             ois.close();
             return true;
